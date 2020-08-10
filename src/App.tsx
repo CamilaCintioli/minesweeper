@@ -1,24 +1,33 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Cell from './components/Cell'
+import Grid from './components/Grid'
+import ResetButton from './components/ResetButton'
+import Counter from './components/Counter'
+import Header from './components/Header'
+import { createGlobalStyle } from 'styled-components'
+
+const GlobalStyle = createGlobalStyle`
+  @font-face {
+    font-family: "seven-segment";
+    src: url("/fonts/seven-segment.ttf") format("truetype");
+  }
+`;
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <GlobalStyle />
+      <Header>
+        <Counter>30</Counter>
+        <ResetButton state={'🙂'} onClick={() => alert('Me han resetado')} />
+        <Counter>5000</Counter>
+      </Header>
+      <Grid>
+        <Cell isOpen={false} state={'💣'} onClick={() => alert('Celda clickeada')} />
+        <Cell isOpen={false} state={'💣'} onClick={() => alert('Celda clickeada')} />
+        <Cell isOpen={false} state={'💣'} onClick={() => alert('Celda clickeada')} />
+        <Cell isOpen={false} state={'💣'} onClick={() => alert('Celda clickeada')} />
+      </Grid>
     </div>
   );
 }
