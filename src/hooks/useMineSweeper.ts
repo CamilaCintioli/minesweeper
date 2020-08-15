@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 
 interface MineSweeperConfig {
   width: number;
@@ -31,6 +32,8 @@ export default function useMineSweeper({
   height = 5,
   bombs = 5,
 }: MineSweeperConfig): MineSweeperBag {
+  const expirationDate = useMemo(() => new Date(Date.now() + (5*60*1000)), []);
+
   return {
     cells: [
       {
@@ -41,7 +44,7 @@ export default function useMineSweeper({
       }
     ],
     state: '🙂',
-    expirationDate: new Date(Date.now() + (5*60*1000)),
+    expirationDate,
     bombsRemaining: 3,
     putFlag: (...args: any[]) => {debugger},
     openCell: (...args: any[]) => {debugger},
