@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components';
 
 import useMineSweeper from '../hooks/useMineSweeper';
 
@@ -9,6 +10,15 @@ import Counter from './Counter'
 import Countdown from './Countdown'
 import Header from './Header'
 
+
+const MinesweeperWrapper = styled.div`
+    display: grid;
+    grid-gap: 1em;
+    margin: auto;
+    padding: 0.5em;
+    max-width: 300px;
+    background-color: darkgray;
+`
 
 export default function Minesweeper() {
 
@@ -27,7 +37,7 @@ export default function Minesweeper() {
  
 
     return (
-        <div>
+        <MinesweeperWrapper>
             <Header>
                 <Counter>{bombsRemaining}</Counter>
                 <ResetButton state={state} onClick={(reset)} />
@@ -46,7 +56,7 @@ export default function Minesweeper() {
                     />
                 ))}
             </Grid>
-        </div>
+        </MinesweeperWrapper>
     )
 
 }
