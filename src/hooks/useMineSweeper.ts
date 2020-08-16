@@ -24,7 +24,7 @@ interface MineSweeperBag {
   state: MineSweeperState
   expirationDate: Date
   bombsRemaining: number
-  putFlag: (x: number, y: number) => void;
+  toggleFlag: (x: number, y: number) => void;
   openCell: (x: number, y: number) => void;
   reset: () => void;
 }
@@ -56,9 +56,9 @@ function getRemainingBombs(cells: Cell[]){
   return 90
 }
 
-function putFlagAt(x: number,y: number,cells: Cell[]):Cell[]{
+function toggleFlagAt(x: number,y: number,cells: Cell[]):Cell[]{
 
-  return cells.map(cell => cell.x === x && cell.y === y ? {...cell,state:'🚩'} : cell)
+  return cells.map(cell => cell.x === x && cell.y === y ? {...cell,state: cell.state ? null : '🚩' } : cell)
 
 }
 
@@ -99,8 +99,8 @@ export default function useMineSweeper({
 
   const bombsRemaining = useMemo(() => getRemainingBombs(cells), [cells])
 
-  const putFlag = useCallback((x, y) => {
-    setCells(putFlagAt(x, y, cells))
+  const toggleFlag = useCallback((x, y) => {
+    setCells(toggleFlagAt(x, y, cells))
   }, [cells])
 
   const openCell = useCallback((x,y) => {
@@ -117,7 +117,7 @@ export default function useMineSweeper({
     state: gameState,
     expirationDate,
     bombsRemaining,
-    putFlag,
+    toggleFlag,
     openCell,
     reset
   }

@@ -31,7 +31,7 @@ export default function Minesweeper() {
       cells,
       expirationDate,
       bombsRemaining,
-      putFlag,
+      toggleFlag,
       openCell,
       reset,
     } = useMineSweeper({ width, height, bombs })
@@ -53,7 +53,7 @@ export default function Minesweeper() {
                         isOpen={isOpen}
                         state={state}
                         onOpen={openCell}
-                        onFlag={putFlag}
+                        onFlag={toggleFlag}
                     />
                 ))}
             </Grid>

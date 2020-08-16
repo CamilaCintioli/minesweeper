@@ -52,12 +52,14 @@ export default function Cell({
         onOpen(x, y);
     }, [onOpen, x, y]);
 
-    const putFlag = useCallback(() => {
+    const toggleFlag = useCallback((event) => {
+        event.stopPropagation()
+        event.preventDefault()
         onFlag(x,y);
     }, [onFlag, x, y])
 
     return(
-        <Button disabled={isOpen} onClick={openCell} onContextMenu={putFlag}><ButtonInner>{state}</ButtonInner></Button>
+        <Button disabled={isOpen} onClick={openCell} onContextMenu={toggleFlag}><ButtonInner>{state}</ButtonInner></Button>
     )
 }
 
