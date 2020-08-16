@@ -16,6 +16,7 @@ const MinesweeperWrapper = styled.div`
     grid-gap: 1em;
     margin: auto;
     padding: 0.5em;
+    border: 3px outset;
     max-width: 300px;
     background-color: darkgray;
 `

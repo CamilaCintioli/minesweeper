@@ -5,7 +5,7 @@ import styled from 'styled-components'
 const Pepon = styled.button`
     margin:0;
     padding:0;
-    border:0;
+    border:1px outset;
     border-radius:0;
     background-color:darkgray;
     height:24px;
