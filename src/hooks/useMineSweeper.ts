@@ -29,67 +29,83 @@ interface MineSweeperBag {
   reset: () => void;
 }
 
-function generateBombsIndexes(maxIndex:number, bombs:number){
+function generateBombsIndexes(maxIndex: number, bombs: number) {
   let bombsIndexed = new Set()
-  while(bombsIndexed.size < bombs){
-    bombsIndexed.add(Math.floor(Math.random()*maxIndex))
+  while (bombsIndexed.size < bombs) {
+    bombsIndexed.add(Math.floor(Math.random() * maxIndex))
   }
 
   return bombsIndexed
 }
 
-function createCells(width: number, height: number, bombs: number){
+function createCells(width: number, height: number, bombs: number) {
 
-  const bombsIndexes = generateBombsIndexes(width*height, bombs)
+  const bombsIndexes = generateBombsIndexes(width * height, bombs)
 
-  return new Array(height*width).fill(null).map((_,index) => ({
-    x: index % width, 
-    y: Math.floor(index/width),
+  return new Array(height * width).fill(null).map((_, index) => ({
+    x: index % width,
+    y: Math.floor(index / width),
     state: null,
     isOpen: false,
-    isBomb : bombsIndexes.has(index)
+    isBomb: bombsIndexes.has(index)
   }))
 
 }
 
-function getRemainingBombs(cells: Cell[]){
+function getRemainingBombs(cells: Cell[]) {
   return 90
 }
 
-function toggleFlagAt(x: number,y: number,cells: Cell[]):Cell[]{
+function toggleFlagAt(x: number, y: number, cells: Cell[]): Cell[] {
 
-  return cells.map(cell => cell.x === x && cell.y === y ? {...cell,state: cell.state ? null : '🚩' } : cell)
+  return cells.map(cell => cell.x === x && cell.y === y ? { ...cell, state: cell.state ? null : '🚩' } : cell)
 
 }
 
-function openCellAt(x: number,y: number,cells: Cell[]):[MineSweeperState, Cell[]]{
+function openCellAt(x: number, y: number, cells: Cell[]): [MineSweeperState, Cell[]] {
 
-  if(cells.find(cell => cell.x === x && cell.y === y)?.isBomb){
-    return ['😨',endGame(cells)]
+  const targetCell = cells.find(cell => cell.x === x && cell.y === y) as Cell
+
+  if (targetCell.isOpen) {
+    return ['🙂', cells]
   }
 
-  return ['🙂',cells.map(cell => cell.x === x && cell.y === y ? openCell(cell,cells) : cell)]
-
-}
-
-function openCell(cell: Cell, cells: Cell[]):Cell{
-
-  if(cell.isBomb){
-    return {...cell,isOpen:true, state:'💣'}
+  if (targetCell.isBomb) {
+    return ['😨', endGame(cells)]
   }
 
-  return {...cell,isOpen:true,state:calculateCellState(cell,cells)}
+  const newState = calculateCellState(targetCell, cells)
+
+  if (newState === 0) {
+    return ['🙂', getSurroundingCells(targetCell, cells).reduce((acc, { x, y }) => openCellAt(x, y, acc)[1], execOpenCellAt(targetCell, cells))]
+  }
+
+  return ['🙂', execOpenCellAt(targetCell, cells)]
+
 }
 
-function getSurroundingCells({ x, y }:Cell, cells:Cell[]) {
-  return cells.filter((cell) => Math.abs(cell.x - x) <= 1 && Math.abs(cell.y - y) <= 1 && !(cell.x === x && cell.y === y)) 
+function execOpenCellAt(targetCell: Cell, cells: Cell[]): Cell[] {
+  return cells.map(cell => cell.x === targetCell.x && cell.y === targetCell.y ? openCell(cell, cells) : cell)
 }
 
-function calculateCellState(cell:Cell,cells:Cell[]){
-  return getSurroundingCells(cell,cells).filter(({ isBomb }) => isBomb).length
+function openCell(cell: Cell, cells: Cell[]): Cell {
+
+  if (cell.isBomb) {
+    return { ...cell, isOpen: true, state: '💣' }
+  }
+
+  return { ...cell, isOpen: true, state: calculateCellState(cell, cells) }
 }
 
-function endGame(cells: Cell[]):Cell[]{
+function getSurroundingCells({ x, y }: Cell, cells: Cell[]) {
+  return cells.filter((cell) => Math.abs(cell.x - x) <= 1 && Math.abs(cell.y - y) <= 1 && !(cell.x === x && cell.y === y))
+}
+
+function calculateCellState(cell: Cell, cells: Cell[]) {
+  return getSurroundingCells(cell, cells).filter(({ isBomb }) => isBomb).length
+}
+
+function endGame(cells: Cell[]): Cell[] {
   return cells.map(cell => openCell(cell, cells))
 }
 
@@ -109,16 +125,16 @@ export default function useMineSweeper({
     setCells(toggleFlagAt(x, y, cells))
   }, [cells])
 
-  const openCell = useCallback((x,y) => {
-    const [newGameState,newCells] = openCellAt(x,y,cells)
+  const openCell = useCallback((x, y) => {
+    const [newGameState, newCells] = openCellAt(x, y, cells)
     setCells(newCells)
     setGameState(newGameState)
   }, [cells])
 
   const reset = useCallback(() => {
     setGameState('🙂')
-    setCells(createCells(width,height,bombs))
-  }, [width,height,bombs])
+    setCells(createCells(width, height, bombs))
+  }, [width, height, bombs])
 
   return {
     cells,
