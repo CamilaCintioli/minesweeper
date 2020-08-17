@@ -59,7 +59,7 @@ export default function Cell({
     }, [onFlag, x, y])
 
     return(
-        <Button disabled={isOpen} onClick={openCell} onContextMenu={toggleFlag}><ButtonInner>{state}</ButtonInner></Button>
+        <Button disabled={isOpen} onClick={openCell} onContextMenu={!isOpen ? toggleFlag : undefined}><ButtonInner>{state}</ButtonInner></Button>
     )
 }
 

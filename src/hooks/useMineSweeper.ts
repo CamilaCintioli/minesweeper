@@ -64,18 +64,21 @@ function toggleFlagAt(x: number,y: number,cells: Cell[]):Cell[]{
 
 function openCellAt(x: number,y: number,cells: Cell[]):Cell[]{
 
+  if(cells.find(cell => cell.x === x && cell.y === y)?.isBomb){
+    return endGame(cells)
+  }
+
   return cells.map(cell => cell.x === x && cell.y === y ? openCell(cell,cells) : cell)
 
 }
 
-function openCell(cell:Cell,cells:Cell[]): Cell{
+function openCell(cell: Cell, cells: Cell[]):Cell{
 
   if(cell.isBomb){
-    return {...cell,state:'💣',isOpen:true}
+    return {...cell,isOpen:true, state:'💣'}
   }
 
   return {...cell,isOpen:true,state:calculateCellState(cell,cells)}
-
 }
 
 function getSurroundingCells({ x, y }:Cell, cells:Cell[]) {
@@ -86,6 +89,9 @@ function calculateCellState(cell:Cell,cells:Cell[]){
   return getSurroundingCells(cell,cells).filter(({ isBomb }) => isBomb).length
 }
 
+function endGame(cells: Cell[]):Cell[]{
+  return cells.map(cell => openCell(cell, cells))
+}
 
 export default function useMineSweeper({
   width = 5,
