@@ -62,13 +62,13 @@ function toggleFlagAt(x: number,y: number,cells: Cell[]):Cell[]{
 
 }
 
-function openCellAt(x: number,y: number,cells: Cell[]):Cell[]{
+function openCellAt(x: number,y: number,cells: Cell[]):[MineSweeperState, Cell[]]{
 
   if(cells.find(cell => cell.x === x && cell.y === y)?.isBomb){
-    return endGame(cells)
+    return ['😨',endGame(cells)]
   }
 
-  return cells.map(cell => cell.x === x && cell.y === y ? openCell(cell,cells) : cell)
+  return ['🙂',cells.map(cell => cell.x === x && cell.y === y ? openCell(cell,cells) : cell)]
 
 }
 
@@ -110,7 +110,9 @@ export default function useMineSweeper({
   }, [cells])
 
   const openCell = useCallback((x,y) => {
-    setCells(openCellAt(x,y,cells))
+    const [newGameState,newCells] = openCellAt(x,y,cells)
+    setCells(newCells)
+    setGameState(newGameState)
   }, [cells])
 
   const reset = useCallback(() => {
