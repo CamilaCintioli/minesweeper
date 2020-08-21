@@ -5,6 +5,4 @@ export default styled.div`
     padding: 0.25em;
     border: 3px inset;
     justify-content: space-between;
-    align-content: center;
-
 `

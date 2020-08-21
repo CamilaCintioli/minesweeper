@@ -1,27 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
-
-
-const Pepon = styled.button`
-    margin:0;
-    padding:0;
-    border:1px outset;
-    border-radius:0;
-    background-color:darkgray;
-    height:24px;
-    width:24px;
-`
+import SquareButton from './SquareButton';
 
 interface Props extends React.Props<never> {
     state: '🙂' | '😨'
     onClick: () => void
 }
 
+const ButtonWrapper = styled.div`display:flex`
+
 export default function ResetButton({
     state, onClick
 }: Props) {
     return (
-        <Pepon onClick={onClick}>{state}</Pepon>
+        <ButtonWrapper><SquareButton onClick={onClick} style={{ flex: '0 0 auto', width: "24px" }}>{state}</SquareButton></ButtonWrapper>
     )
 }
 
