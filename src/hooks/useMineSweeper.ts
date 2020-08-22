@@ -53,7 +53,21 @@ function createCells(width: number, height: number, bombs: number) {
 }
 
 function getRemainingBombs(cells: Cell[]) {
-  return 90
+  return cells.reduce((bombsRemaining,cell) => {
+
+    if(cell.isBomb && cell.state === '🚩'){
+      return bombsRemaining
+    }
+
+    if(cell.isBomb){
+      return bombsRemaining+1
+    }
+    if(cell.state === '🚩'){
+      return bombsRemaining-1
+    }
+    return bombsRemaining
+
+  } ,0)
 }
 
 function toggleFlagAt(x: number, y: number, cells: Cell[]): Cell[] {
