@@ -128,7 +128,7 @@ export default function useMineSweeper({
   height = 5,
   bombs = 5,
 }: MineSweeperConfig): MineSweeperBag {
-  const expirationDate = useMemo(() => new Date(Date.now() + (5 * 60 * 1000)), []);
+  const expirationDate = useMemo(() => new Date(), []);
 
   const [cells, setCells] = useState<Cell[]>(() => createCells(width, height, bombs))
   const [gameState, setGameState] = useState<MineSweeperState>('🙂')

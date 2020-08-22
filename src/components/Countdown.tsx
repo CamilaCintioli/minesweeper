@@ -6,7 +6,7 @@ interface Props extends React.Props<never> {
 }
 
 function secondsRemaining(to: Date): number {
-  return Math.floor((to.getTime() - Date.now()) / 1000);
+  return Math.abs(Math.floor((to.getTime() - Date.now()) / 1000));
 }
 
 export default function Countdown({
