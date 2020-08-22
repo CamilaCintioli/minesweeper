@@ -40,7 +40,7 @@ export default function Minesweeper() {
     return (
         <MinesweeperWrapper>
             <Header>
-                <Counter>{bombsRemaining}</Counter>
+                <Counter value={bombsRemaining} size={3} />
                 <ResetButton state={state} onClick={(reset)} />
                 <Countdown to={expirationDate} component={Counter} />
             </Header>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 interface Props extends React.Props<never> {
   to: Date
-  component: React.ComponentType
+  component: React.ComponentType<{value:number,size:number}>
 }
 
 function secondsRemaining(to: Date): number {
@@ -26,8 +26,6 @@ export default function Countdown({
   }, [to]);
 
   return (
-    <Component>
-      {seconds}
-    </Component>
+    <Component value={seconds} size={3} />
   );
 }
