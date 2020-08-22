@@ -7,7 +7,7 @@ interface MineSweeperConfig {
   bombs: number;
 }
 
-type MineSweeperState = '🙂' | '😨'
+type MineSweeperState = '🙂' | '😨' | '😎'
 
 type CellState = '💣' | '🚩' | null | number
 
@@ -91,10 +91,16 @@ function openCellAt(x: number, y: number, cells: Cell[]): [MineSweeperState, Cel
   const newState = calculateCellState(targetCell, cells)
 
   if (newState === 0) {
-    return ['🙂', getSurroundingCells(targetCell, cells).reduce((acc, { x, y }) => openCellAt(x, y, acc)[1], execOpenCellAt(targetCell, cells))]
+
+    const newCells = getSurroundingCells(targetCell, cells).reduce((acc, { x, y }) => openCellAt(x, y, acc)[1], execOpenCellAt(targetCell, cells));
+    
+    return [getGameState(newCells),newCells]
   }
 
-  return ['🙂', execOpenCellAt(targetCell, cells)]
+  const newCells = execOpenCellAt(targetCell, cells)
+
+  return [getGameState(newCells), newCells]
+
 
 }
 
@@ -121,6 +127,10 @@ function calculateCellState(cell: Cell, cells: Cell[]) {
 
 function endGame(cells: Cell[]): Cell[] {
   return cells.map(cell => openCell(cell, cells))
+}
+
+function getGameState(cells: Cell[]): MineSweeperState {
+  return cells.filter(cell => !cell.isOpen).every((cell) => cell.isBomb) ? '😎' : '🙂'
 }
 
 export default function useMineSweeper({

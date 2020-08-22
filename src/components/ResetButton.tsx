@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import SquareButton from './SquareButton';
 
 interface Props extends React.Props<never> {
-    state: '🙂' | '😨'
+    state: '🙂' | '😨' | '😎'
     onClick: () => void
 }
 
