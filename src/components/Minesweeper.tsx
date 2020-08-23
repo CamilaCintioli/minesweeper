@@ -7,7 +7,6 @@ import Cell from './Cell'
 import Grid from './Grid'
 import ResetButton from './ResetButton'
 import Counter from './Counter'
-import Countdown from './Countdown'
 import Header from './Header'
 
 
@@ -29,7 +28,7 @@ export default function Minesweeper() {
     const {
       state,
       cells,
-      expirationDate,
+      secondsElapsed,
       bombsRemaining,
       toggleFlag,
       openCell,
@@ -42,7 +41,7 @@ export default function Minesweeper() {
             <Header>
                 <Counter value={bombsRemaining} size={3} />
                 <ResetButton state={state} onClick={(reset)} />
-                <Countdown to={expirationDate} component={Counter} />
+                <Counter value={secondsElapsed} size={3} />
             </Header>
             <Grid >
                 {cells.map(({ x, y, state, isOpen }) => (

@@ -1,5 +1,5 @@
 import { useMemo, useState, useCallback } from 'react';
-import { create } from 'domain';
+import useClock from './useClock';
 
 interface MineSweeperConfig {
   width: number;
@@ -22,7 +22,7 @@ interface Cell {
 interface MineSweeperBag {
   cells: Cell[]
   state: MineSweeperState
-  expirationDate: Date
+  secondsElapsed: number
   bombsRemaining: number
   toggleFlag: (x: number, y: number) => void;
   openCell: (x: number, y: number) => void;
@@ -138,7 +138,10 @@ export default function useMineSweeper({
   height = 5,
   bombs = 5,
 }: MineSweeperConfig): MineSweeperBag {
-  const expirationDate = useMemo(() => new Date(), []);
+
+  const [startDate, setStartDate] = useState(() => new Date())
+
+  const secondsElapsed = useClock(startDate,500)
 
   const [cells, setCells] = useState<Cell[]>(() => createCells(width, height, bombs))
   const [gameState, setGameState] = useState<MineSweeperState>('🙂')
@@ -158,12 +161,13 @@ export default function useMineSweeper({
   const reset = useCallback(() => {
     setGameState('🙂')
     setCells(createCells(width, height, bombs))
+    setStartDate(new Date())
   }, [width, height, bombs])
 
   return {
     cells,
     state: gameState,
-    expirationDate,
+    secondsElapsed,
     bombsRemaining,
     toggleFlag,
     openCell,
